@@ -18,14 +18,33 @@ const html = computed(() => {
   return marked.parse(post.value.content, { async: false });
 });
 
+function parsePostDate(value) {
+  if (value == null || value === "") return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+
+  // iOS Safari는 `YYYY-MM-DD HH:mm:ss +0900` 포맷 파싱을 실패할 수 있어
+  // ISO 형태(`T`, `+09:00`)로 정규화한 뒤 다시 시도합니다.
+  const normalized = raw
+    .replace(/^(\d{4}-\d{2}-\d{2})\s+/, "$1T")
+    .replace(/([+-]\d{2})(\d{2})$/, "$1:$2");
+
+  const d = new Date(normalized);
+  if (Number.isNaN(d.getTime())) return null;
+  return d;
+}
+
 const metaLine = computed(() => {
   const p = post.value;
   if (!p) return "";
   const d = p.data.date ?? p.data.last_modified_at;
-  const dateStr = d
-    ? new Intl.DateTimeFormat("ko-KR", {
-        dateStyle: "medium",
-      }).format(new Date(d))
+  const parsedDate = parsePostDate(d);
+  const dateStr = parsedDate
+    ? parsedDate.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
     : "";
   const cats = Array.isArray(p.data.categories)
     ? p.data.categories.join(" · ")

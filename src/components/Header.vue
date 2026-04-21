@@ -219,11 +219,13 @@ function onSubmit() {
   align-items: center;
   gap: 0.45rem;
   min-width: 0;
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .mobile-nav-context {
   display: none;
+  min-width: 0;
+  flex: 1 1 auto;
   font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -245,6 +247,8 @@ function onSubmit() {
   .header-left-cluster {
     grid-column: 1;
     justify-self: start;
+    width: 100%;
+    overflow: hidden;
   }
 
   .site-title {
@@ -256,6 +260,7 @@ function onSubmit() {
   .header-search {
     grid-column: 3;
     justify-self: end;
+    flex-shrink: 0;
   }
 
   .mobile-nav-context {

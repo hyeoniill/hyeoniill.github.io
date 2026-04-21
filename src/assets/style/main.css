@@ -391,13 +391,17 @@ body.is-drawer-open {
  * - ≥768px에서는 `display: none`으로 꺼집니다.
  * ========================================================= */
 .mobile-nav {
+  display: none;
+}
+
+.mobile-nav.is-open {
+  display: block;
   position: fixed;
   top: var(--header-h);
   left: 0;
   right: 0;
   z-index: var(--z-drawer);
   overflow: hidden;
-  pointer-events: none;
 }
 
 /* 패널 뒤 어두운 배경: 열렸을 때만 입력 수신 */

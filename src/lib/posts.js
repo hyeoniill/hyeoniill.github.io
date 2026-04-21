@@ -28,6 +28,31 @@ for (const [filePath, url] of Object.entries(imageModules)) {
   imageUrlMap.set(key, url);
 }
 
+function postImageKeyFromSrc(src) {
+  if (src.startsWith("/assets/")) return src;
+  if (src.startsWith("../assets/")) return `/${src.replace(/^\.\.\//, "")}`;
+  return null;
+}
+
+/**
+ * HTML `<img src="/assets/...">` / `../assets/...` 를 번들 URL로 치환합니다.
+ * (마크다운 이미지와 달리 raw HTML 은 기본 치환 대상이 아님)
+ */
+function rewriteHtmlImgSrcs(html) {
+  return html.replace(/<img\b[^>]*>/gi, (tag) =>
+    tag.replace(
+      /\bsrc\s*=\s*(["'])([^"']+)\1/i,
+      (m, quote, src) => {
+        const key = postImageKeyFromSrc(src);
+        if (!key) return m;
+        const resolved = imageUrlMap.get(key);
+        if (!resolved) return m;
+        return `src=${quote}${resolved}${quote}`;
+      },
+    ),
+  );
+}
+
 /**
  * 본문에서 `![alt](/assets/...)` 형태의 절대 경로를 Vite가 만든
  * 실제 에셋 URL로 바꾸고, kramdown 전용 속성 블록(`{: ... }`)은 제거합니다.
@@ -41,7 +66,8 @@ function rewritePostContent(content) {
       return `![${alt}](${resolved}${title ?? ""})`;
     },
   );
-  return withResolvedImages.replace(/\s*\{:[^}]*\}/g, "");
+  const withHtmlImgs = rewriteHtmlImgSrcs(withResolvedImages);
+  return withHtmlImgs.replace(/\s*\{:[^}]*\}/g, "");
 }
 
 function moduleString(mod) {

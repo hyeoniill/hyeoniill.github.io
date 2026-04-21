@@ -235,8 +235,35 @@ function onSubmit() {
 }
 
 @media (max-width: 767.98px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.75rem;
+  }
+
+  .header-left-cluster {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .site-title {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .search-toggle,
+  .header-search {
+    grid-column: 3;
+    justify-self: end;
+  }
+
   .mobile-nav-context {
     display: block;
+  }
+
+  .header.is-search-open .header-inner {
+    display: flex;
   }
 
   .header.is-search-open .header-left-cluster {

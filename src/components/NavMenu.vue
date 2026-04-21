@@ -4,17 +4,8 @@
 // - 렌더링은 전역 `.nav-block` 스타일을 재사용하므로 별도 스타일은 거의 없습니다.
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-
-// 고정 카테고리 목록. URL 쿼리 값(`?category=<name>`)으로 그대로 들어갑니다.
-// 이후 포스트 프론트매터와 연결할 때도 이 배열을 기준으로 매핑합니다.
-const SIDEBAR_CATEGORIES = [
-  "Backend",
-  "Frontend",
-  "Algorithm",
-  "Blockchain",
-  "Security",
-  "OS",
-];
+import CategoryList from "@/components/CategoryList.vue";
+import { SIDEBAR_CATEGORIES } from "@/lib/navCategories";
 
 // 활성 상태 판별은 수동으로 계산합니다.
 // router-link의 기본 `active-class`는 "경로(path)"만 비교하기 때문에,
@@ -35,9 +26,6 @@ const isHomeActive = computed(
   () => route.path === "/" && currentCategory.value === "",
 );
 
-function isActiveCategory(name) {
-  return currentCategory.value === name;
-}
 </script>
 
 <template>
@@ -51,20 +39,8 @@ function isActiveCategory(name) {
       <router-link to="/" :class="{ 'is-active': isHomeActive }">홈</router-link>
     </nav>
 
-    <!-- 카테고리 메뉴: 고정 6개. 각 항목은 `/?category=<이름>`으로 이동 -->
-    <section class="category-section" aria-label="카테고리">
-      <h2 class="category-heading">카테고리</h2>
-      <nav class="nav-block">
-        <router-link
-          v-for="name in SIDEBAR_CATEGORIES"
-          :key="name"
-          :to="{ path: '/', query: { category: name } }"
-          :class="{ 'is-active': isActiveCategory(name) }"
-        >
-          {{ name }}
-        </router-link>
-      </nav>
-    </section>
+    <!-- 다른 곳에서 쓸 때는 title·items만 바꿔 `<CategoryList />`에 넘기면 됩니다. -->
+    <CategoryList title="카테고리" :items="SIDEBAR_CATEGORIES" />
   </div>
 </template>
 
@@ -75,19 +51,5 @@ function isActiveCategory(name) {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-}
-
-.category-section {
-  align-self: stretch;
-}
-
-.category-heading {
-  margin: 0 0 0.5rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--text) 55%, var(--primary));
-  text-align: left;
 }
 </style>

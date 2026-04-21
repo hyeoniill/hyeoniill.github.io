@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { marked } from "marked";
 import { getPostBySlug } from "@/lib/posts";
+import PostHeader from "@/components/PostHeader.vue";
 
 const props = defineProps({
   slug: {
@@ -35,10 +36,7 @@ const metaLine = computed(() => {
 
 <template>
   <article v-if="post" class="post-article prose">
-    <header class="post-header">
-      <h1 class="post-title">{{ post.title }}</h1>
-      <p v-if="metaLine" class="post-meta">{{ metaLine }}</p>
-    </header>
+    <PostHeader :title="post.title" :meta-line="metaLine" />
     <div class="post-body" v-html="html" />
     <footer class="post-footer">
       <ul v-if="Array.isArray(post.data.tags) && post.data.tags.length" class="post-tags">
@@ -50,27 +48,6 @@ const metaLine = computed(() => {
 </template>
 
 <style scoped>
-.post-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.post-title {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.25;
-  color: var(--text);
-}
-
-.post-meta {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
 .post-tags {
   display: flex;
   flex-wrap: wrap;

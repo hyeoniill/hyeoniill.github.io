@@ -1,22 +1,32 @@
 # Hyeoniill 블로그
 
-Vue 3 + Vite 정적 빌드입니다. [GitHub Pages](https://pages.github.com/)에 GitHub Actions로 배포할 수 있습니다.
+## 프로젝트 구조
 
-## GitHub Pages 배포
+| 경로 | 역할 |
+| ------ | ------ |
+| **`.github/workflows/`** | GitHub Actions 워크플로(빌드·Pages 배포 등 CI/CD) |
+| **`public/`** | 빌드 시 그대로 `dist/` 루트로 복사되는 정적 파일 |
+| **`scripts/`** | npm 스크립트에서 쓰는 Node 유틸. 예: `spa-github-pages.mjs`는 빌드 후 `404.html`을 만들어 SPA 라우팅 폴백 제공 |
 
-1. GitHub 저장소 **Settings → Pages**에서 **Build and deployment**의 **Source**를 **GitHub Actions**로 선택합니다.
-2. `main`(또는 `master`) 브랜치에 푸시하면 `.github/workflows/deploy-github-pages.yml`이 빌드 후 Pages에 올립니다.
-3. 배포 URL
-   - 일반 저장소(예: `github-blog`): `https://<사용자명>.github.io/github-blog/`
-   - 사용자 사이트 저장소(이름이 `<사용자명>.github.io`인 경우): `https://<사용자명>.github.io/` (루트 경로)
+<br>
 
-워크플로가 저장소 이름에 맞춰 `VITE_BASE_PATH`를 넣어 주므로, **저장소 이름을 바꾼 뒤에는 다시 푸시**해 빌드하면 됩니다.
+### `src/` — 애플리케이션 소스
 
-### 로컬에서 Pages용 빌드 미리보기
+| 경로 | 역할 |
+| ------ | ------ |
+| **`src/router/`** | `vue-router` 라우트 정의 |
+| **`src/pages/`** | 라우트 단위 페이지 컴포넌트 |
+| **`src/components/`** | 재사용 UI 컴포넌트 |
+| **`src/lib/`** | 포스트 로딩·파싱, 카테고리·내비 설정 등 비즈니스 로직 |
 
-```bash
-VITE_BASE_PATH=/저장소이름/ npm run build
-npm run preview -- --base /저장소이름/
-```
+<br>
 
-`preview`의 `--base`는 빌드에 쓴 값과 같게 맞춰야 합니다.
+### `src/assets/` — 에셋·콘텐츠
+
+| 경로 | 역할 |
+| ------ | ------ |
+| **`src/assets/posts/`** | **실제 블로그 글** 마크다운 |
+| **`src/assets/posting/`** | **현재 빌드 파이프라인에는 연결되지 않은** 마크다운 보관용 폴더 |
+| **`src/assets/style/`** | 전역 CSS |
+| **`src/assets/img/bg_image/`** | 카테고리 히어로 등 UI용 배경 이미지 |
+| **`src/assets/img/post_image/`** | 글 본문에서 참조하는 이미지용 경로 |

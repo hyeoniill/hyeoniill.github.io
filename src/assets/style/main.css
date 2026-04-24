@@ -33,10 +33,25 @@
   --radius: 10px;
   --shadow: 0 12px 40px color-mix(in srgb, #000 45%, transparent);
 
+  /* 본문 기둥 상단 여백 — 자바 히어로 등에서 동일 값으로 당겨 올릴 때 사용 */
+  --main-inner-pad-top: clamp(1.5rem, 4vw, 2.75rem);
+
   /* z-index 체계 */
   --z-header: 10;
   --z-footer: 10;
   --z-drawer: 50;
+
+  /* public/ 에 두는 자체 호스팅 폰트 (@font-face 의 font-family 와 동일) */
+  --font-sans: "Kyobo Handwriting 2025", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+@font-face {
+  font-family: "Kyobo Handwriting 2025";
+  src: url("/KyoboHandwriting2025lyb.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* =========================================================
@@ -58,15 +73,8 @@ body {
   min-height: 100vh;
   background-color: var(--bg);
   color: var(--text);
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
   line-height: 1.65;
 }
 
@@ -110,6 +118,9 @@ body.is-drawer-open {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  /* 포스트 히어로 배경이 기둥 전폭을 쓰도록 컨테이너 쿼리 기준 */
+  container-type: inline-size;
+  container-name: content-column;
   padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
   background: radial-gradient(
     120% 80% at 100% 0%,
@@ -322,7 +333,7 @@ body.is-drawer-open {
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding-top: clamp(1.5rem, 4vw, 2.75rem);
+  padding-top: var(--main-inner-pad-top);
   padding-bottom: clamp(2.5rem, 6vw, 4rem);
 }
 
@@ -486,6 +497,8 @@ body.is-drawer-open {
  * ========================================================= */
 .prose {
   color: var(--text);
+  /* 본문 body line-height(1.65)와 같은 스텝 — 섹션 제목 위 여백 계산용 */
+  --prose-line: 1.65rem;
 }
 
 .prose h1,
@@ -498,10 +511,33 @@ body.is-drawer-open {
 }
 
 .prose h2 {
-  margin-top: 2rem;
+  margin-top: calc(3 * var(--prose-line));
   padding-bottom: 0.35rem;
   border-bottom: 1px solid var(--border);
   color: color-mix(in srgb, var(--text) 95%, var(--accent));
+}
+
+.prose h3 {
+  margin-top: calc(2 * var(--prose-line));
+}
+
+/* 포스트 본문 첫 제목은 PostHeader 아래라 위쪽은 과하게 벌리지 않음 */
+.prose .post-body > h2:first-child,
+.prose .post-body > h3:first-child {
+  margin-top: 0;
+}
+
+.prose abbr {
+  text-decoration: none;
+  border-bottom: none;
+  cursor: help;
+  transition: color 0.15s ease;
+}
+
+@media (hover: hover) {
+  .prose abbr:hover {
+    color: var(--accent);
+  }
 }
 
 .prose code {

@@ -53,6 +53,40 @@ function rewriteHtmlImgSrcs(html) {
   );
 }
 
+/** `]` 직후 `**` / `***` 다음에 바로 글자가 붙으면 marked가 강조를 닫지 못하는 경우가 있어 U+2009를 넣습니다. */
+const MD_THIN_SPACE = "\u2009";
+
+function patchMarkdownEmphasisAfterBracket(content) {
+  const chunks = content.split(/(```[\s\S]*?```)/g);
+  return chunks
+    .map((chunk) => {
+      if (chunk.startsWith("```") && chunk.endsWith("```")) return chunk;
+      return chunk.replace(
+        /(\])(\*\*\*|\*\*)([A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ])/g,
+        (match, bracket, stars, next) =>
+          `${bracket}${stars}${MD_THIN_SPACE}${next}`,
+      );
+    })
+    .join("");
+}
+
+/**
+ * 마침표 직후 단일 줄바꿈을 마크다운 하드 줄바꿈(줄 끝 공백 2칸)으로 바꿉니다.
+ * 숫자 목록 `1.` 등은 앞 글자가 숫자가 아니라서 건드리지 않습니다.
+ */
+function expandLineBreakAfterSentencePeriod(content) {
+  const chunks = content.split(/(```[\s\S]*?```)/g);
+  return chunks
+    .map((chunk) => {
+      if (chunk.startsWith("```") && chunk.endsWith("```")) return chunk;
+      return chunk.replace(
+        /(?<=[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ\)\]'"」』）…])\.\n(?!\n)/g,
+        ".  \n",
+      );
+    })
+    .join("");
+}
+
 /**
  * 본문에서 `![alt](/assets/...)` 형태의 절대 경로를 Vite가 만든
  * 실제 에셋 URL로 바꾸고, kramdown 전용 속성 블록(`{: ... }`)은 제거합니다.
@@ -67,7 +101,9 @@ function rewritePostContent(content) {
     },
   );
   const withHtmlImgs = rewriteHtmlImgSrcs(withResolvedImages);
-  return withHtmlImgs.replace(/\s*\{:[^}]*\}/g, "");
+  const withEmphasisFix = patchMarkdownEmphasisAfterBracket(withHtmlImgs);
+  const withLineBreaks = expandLineBreakAfterSentencePeriod(withEmphasisFix);
+  return withLineBreaks.replace(/\s*\{:[^}]*\}/g, "");
 }
 
 function moduleString(mod) {
@@ -104,12 +140,14 @@ function pathToSlug(filePath) {
   return name.replace(/\.md$/i, "");
 }
 
-function parseSortDate(data, slug) {
-  const raw = data.date ?? data.last_modified_at ?? "";
-  const fromMeta = new Date(raw).getTime();
-  if (!Number.isNaN(fromMeta)) return fromMeta;
-  const m = /^(\d{4}-\d{2}-\d{2})/.exec(slug);
-  if (m) return new Date(m[1]).getTime();
+/** 정렬용 시각 — 파일명이 아니라 프론트매터 `date`, 없으면 `last_modified_at`만 사용 */
+function parseSortDate(data) {
+  for (const key of ["date", "last_modified_at"]) {
+    const raw = data[key];
+    if (raw == null || String(raw).trim() === "") continue;
+    const t = new Date(String(raw).trim()).getTime();
+    if (!Number.isNaN(t)) return t;
+  }
   return 0;
 }
 
@@ -144,7 +182,7 @@ function normalizePost(filePath, raw) {
       categories,
     },
     content: rewritePostContent(content),
-    sortTime: parseSortDate(data, slug),
+    sortTime: parseSortDate(data),
   };
 }
 

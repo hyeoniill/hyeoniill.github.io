@@ -65,9 +65,9 @@ var a = "hello";
 자바스크립트의 코드는 위 → 아래로 실행된다.
 
 
-##TDZ
-" TDZ: Temporal Dead Zone
-" 변수는 존재하지만 아직 초기화되지 않아 접근할 수 없는 구간
+## TDZ  
+> TDZ: Temporal Dead Zone  
+> 변수는 존재하지만 아직 초기화되지 않아 접근할 수 없는 구간
 
 자바스크립트에서는 3가지 종류로 변수를 선언할 수 있다. 
 1. var
@@ -88,7 +88,6 @@ const a = "hello";
 ```console
 결과: ReferenceError: Cannot access 'a' before initialization at ...
 ```
-<br><br><br>
 
 ## 내부 함수
 > 내부 함수: 함수 내부에 정의된 함수
@@ -102,10 +101,9 @@ function outer() {
   inner();
 }
 ```
+
 inner()함수는 outer()함수 내에 정의되어 있다.  
 여기서 inner()를 내부 함수, outer()를 외부 함수라고 한다.
-
-<br><br><br>
 
 ## 익명 함수
 > 익명 함수: 이름 없이 선언한 함수

@@ -19,7 +19,7 @@ OOP에서 상속을 사용하면 하위 객체들이 가진 공통 속성이나 
 
 ![set 관점](/assets/img/post_image/2025-07-15/image2.png){: width="70%" height="auto"}
 
-### 메모리 관점
+## 메모리 관점
 
 ```java
 class Parent {

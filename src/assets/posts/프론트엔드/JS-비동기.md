@@ -65,7 +65,7 @@ Thread t1 = new Thread(() -> {
         t3.start();
 ```
 
-#### 실행 결과
+### 실행 결과
 ```console
 case1                   case2
 첫 번째 작업               첫 번째 작업
@@ -92,7 +92,7 @@ setTimeout(() => {
 console.log('세 번째 작업');
 ```
 
-#### 실행 결과
+### 실행 결과
 ```console
 첫 번째 작업
 세 번째 작업

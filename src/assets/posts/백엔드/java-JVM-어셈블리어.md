@@ -22,7 +22,7 @@ last_modified_at: 2025-07-18
 
 먼저 javac 명령어로 바이트 코드로 변환시킨 파일을 javap -c 명령어로 복구하면 어셈블리어를 확인할 수 있다.
 
-### 기본 메서드
+## 기본 메서드
 
 ```java
 public int add(int a, int b) {
@@ -47,7 +47,7 @@ opcode랑 다르게 operand는 명령어에 따라서 1~4 바이트까지 가능
 
 주소 표현이나 다른 여러가지 문제는 잘 모르겠지만 자바가 알아서 다른 명령어로 잘 처리했다고 한다.
 
-### new 연산자
+## new 연산자
 
 ```java
 Person p = new Person();
@@ -65,7 +65,7 @@ Person p = new Person();
 - `dup`은 new로 생성한 참조를 복제하는데 이는 invokespecial에서 생성자를 호출하면서 참조 포인터를 하나 소비하기 때문이다.
 - `astore_1`은 생성된 객체를 1번 로컬 변수에 저장한다.
 
-### 정적 바인딩(오버로딩)
+## 정적 바인딩(오버로딩)
 
 ```java
 class Printer {
@@ -150,7 +150,7 @@ public class Printer {
 - `invokespecial`은 컴파일 타임에 호출이 고정되는 정적 바인딩이고,
   `invokevirtual`은 런타임에 실제 객체 비교를 하고 VMT를 통해 메서드를 호출하는 동적 바인딩이다.
 
-### 동적 바인딩(오버라이딩)
+## 동적 바인딩(오버라이딩)
 
 ```java
 class Animal {

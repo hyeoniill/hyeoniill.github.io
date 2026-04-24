@@ -12,6 +12,7 @@ import json from "highlight.js/lib/languages/json";
 import bash from "highlight.js/lib/languages/bash";
 import sql from "highlight.js/lib/languages/sql";
 import { getPostBySlug } from "@/lib/posts";
+import { resolveCategoryHeroBgUrl } from "@/lib/categoryHeroBg";
 import PostHeader from "@/components/PostHeader.vue";
 import GiscusComments from "@/components/GiscusComments.vue";
 import PostAdjacentNav from "@/components/PostAdjacentNav.vue";
@@ -97,11 +98,15 @@ const metaLine = computed(() => {
     : "";
   return [dateStr, cats].filter(Boolean).join(" · ");
 });
+
+const postHeroBgUrl = computed(() =>
+  resolveCategoryHeroBgUrl(post.value?.data?.categories),
+);
 </script>
 
 <template>
   <article v-if="post" class="post-article prose">
-    <PostHeader :title="post.title" :meta-line="metaLine" />
+    <PostHeader :title="post.title" :meta-line="metaLine" :hero-bg-url="postHeroBgUrl ?? ''" />
     <div class="post-body" v-html="html" />
     <footer class="post-footer">
       <ul v-if="Array.isArray(post.data.tags) && post.data.tags.length" class="post-tags">

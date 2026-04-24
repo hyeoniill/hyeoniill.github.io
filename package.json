@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node scripts/spa-github-pages.mjs",
+    "postbuild": "node scripts/generate-sitemap.mjs && node scripts/spa-github-pages.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@unhead/vue": "^3.0.5",
     "highlight.js": "^11.11.1",
     "js-yaml": "^4.1.1",
     "marked": "^18.0.0",

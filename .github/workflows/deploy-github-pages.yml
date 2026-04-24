@@ -40,6 +40,12 @@ jobs:
             echo "Using project base: /${NAME}/"
           fi
 
+      - name: Set public site origin (canonical, sitemap, OG)
+        shell: bash
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          echo "VITE_SITE_ORIGIN=https://${OWNER}.github.io" >> "$GITHUB_ENV"
+
       - name: Build
         run: npm run build
 

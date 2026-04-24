@@ -1,4 +1,5 @@
 <script setup>
+import { useHead } from "@unhead/vue";
 import { computed } from "vue";
 import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
@@ -11,8 +12,9 @@ import css from "highlight.js/lib/languages/css";
 import json from "highlight.js/lib/languages/json";
 import bash from "highlight.js/lib/languages/bash";
 import sql from "highlight.js/lib/languages/sql";
-import { getPostBySlug } from "@/lib/posts";
+import { getPostBySlug, toPlainPreview } from "@/lib/posts";
 import { resolveCategoryHeroBgUrl } from "@/lib/categoryHeroBg";
+import { absoluteAssetUrl, absolutePageUrl } from "@/lib/site";
 import PostHeader from "./PostHeader.vue";
 import GiscusComments from "./GiscusComments.vue";
 import PostAdjacentNav from "./PostAdjacentNav.vue";
@@ -102,6 +104,44 @@ const metaLine = computed(() => {
 const postHeroBgUrl = computed(() =>
   resolveCategoryHeroBgUrl(post.value?.data?.categories),
 );
+
+useHead(() => {
+  const p = post.value;
+  const titleStr = p ? p.title : "글을 찾을 수 없습니다";
+  const docTitle = `${titleStr} · Hyeoniill 블로그`;
+  const desc = p
+    ? toPlainPreview(p.content, 155).trim() || p.title
+    : "요청한 글을 찾을 수 없습니다.";
+  const canonical = absolutePageUrl(`/posts/${props.slug}`);
+  const hero = postHeroBgUrl.value;
+  const ogImage = hero ? absoluteAssetUrl(hero) : "";
+
+  const meta = [
+    { name: "description", content: desc },
+    { property: "og:title", content: titleStr },
+    { property: "og:description", content: desc },
+    { property: "og:url", content: canonical },
+    { property: "og:type", content: p ? "article" : "website" },
+    {
+      name: "twitter:card",
+      content: ogImage ? "summary_large_image" : "summary",
+    },
+    { name: "twitter:title", content: titleStr },
+    { name: "twitter:description", content: desc },
+  ];
+  if (ogImage) {
+    meta.push(
+      { property: "og:image", content: ogImage },
+      { name: "twitter:image", content: ogImage },
+    );
+  }
+
+  return {
+    title: docTitle,
+    meta,
+    link: [{ rel: "canonical", href: canonical }],
+  };
+});
 </script>
 
 <template>

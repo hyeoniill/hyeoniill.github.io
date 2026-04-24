@@ -1,5 +1,24 @@
 <template>
   <nav class="nav-block social-nav" aria-label="소셜 메뉴">
+    <router-link
+      class="social-nav__link"
+      to="/portfolio"
+      aria-label="포트폴리오 페이지"
+      title="포트폴리오"
+    >
+      <svg
+        class="social-nav__icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          fill="currentColor"
+          d="M9 4.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2V6h3a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h3V4.5zm2-.5v2h2V4h-2zm-5 4a1 1 0 0 0-1 1v1.25c2.02.86 4.35 1.31 7 1.31s4.98-.45 7-1.31V9a1 1 0 0 0-1-1H6zm13 4.35a22.7 22.7 0 0 1-7 1.06 22.7 22.7 0 0 1-7-1.06V17.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5.15z"
+        />
+      </svg>
+    </router-link>
+
     <a
       class="social-nav__link"
       href="https://github.com/Hyeoniill"
@@ -23,11 +42,17 @@
 </template>
 
 <style scoped>
+.social-nav {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
 .social-nav__link {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0.65rem;
+  padding: 0.5rem;
+  min-width: 2.35rem;
 }
 
 .social-nav__icon {

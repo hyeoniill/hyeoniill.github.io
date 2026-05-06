@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "postbuild": "node scripts/generate-sitemap.mjs && node scripts/spa-github-pages.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@unhead/vue": "^3.0.5",
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.5",
+    "prettier": "^3.6.2",
     "vite": "^8.0.4"
   }
 }

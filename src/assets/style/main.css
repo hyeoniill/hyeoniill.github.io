@@ -391,7 +391,15 @@ body.is-drawer-open {
   align-items: center;
   gap: 1.5rem;
   overflow-y: auto;
+  -ms-overflow-style: none; /* IE/Edge Legacy */
+  scrollbar-width: none; /* Firefox */
   z-index: var(--z-header);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* =========================================================
@@ -445,7 +453,15 @@ body.is-drawer-open {
   transition: transform 0.22s ease;
   max-height: calc(100vh - var(--header-h));
   overflow-y: auto;
+  -ms-overflow-style: none; /* IE/Edge Legacy */
+  scrollbar-width: none; /* Firefox */
   pointer-events: auto;
+}
+
+.mobile-nav-panel::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .mobile-nav.is-open .mobile-nav-panel {

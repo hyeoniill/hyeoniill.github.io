@@ -177,6 +177,7 @@ function normalizePost(filePath, raw) {
   return {
     slug,
     title,
+    filePath,
     data: {
       ...data,
       categories,
@@ -191,6 +192,12 @@ const allPosts = Object.entries(rawModules).map(([path, mod]) =>
 );
 
 allPosts.sort((a, b) => b.sortTime - a.sortTime);
+
+function isPostingPath(filePath) {
+  return /\/posting\//.test(filePath);
+}
+
+const publicPosts = allPosts.filter((post) => !isPostingPath(post.filePath));
 
 const bySlug = new Map(allPosts.map((p) => [p.slug, p]));
 
@@ -220,7 +227,7 @@ function makeCategoryQuery(parent, subcategory = "") {
 const categoryNavItems = (() => {
   const byParent = new Map();
 
-  for (const post of allPosts) {
+  for (const post of publicPosts) {
     const [parent, subcategory] = extractCategories(post.data);
     if (!parent) continue;
     if (!byParent.has(parent)) byParent.set(parent, new Set());
@@ -238,7 +245,7 @@ const categoryNavItems = (() => {
 })();
 
 export function getAllPosts() {
-  return allPosts;
+  return publicPosts;
 }
 
 export function getPostBySlug(slug) {
@@ -248,9 +255,9 @@ export function getPostBySlug(slug) {
 
 export function getAdjacentPosts(slug) {
   if (!slug) return { previous: null, next: null };
-  const idx = allPosts.findIndex((p) => p.slug === slug);
+  const idx = publicPosts.findIndex((p) => p.slug === slug);
   if (idx === -1) return { previous: null, next: null };
-  const current = allPosts[idx];
+  const current = publicPosts[idx];
   const currentCategories = extractCategories(current.data);
   const currentSubcategory = currentCategories[currentCategories.length - 1] ?? "";
 
@@ -260,22 +267,22 @@ export function getAdjacentPosts(slug) {
     return sub !== "" && sub === currentSubcategory;
   }
 
-  // allPosts는 최신순 정렬입니다.
+  // publicPosts는 최신순 정렬입니다.
   // 같은 서브카테고리 안에서만 인접 글을 찾습니다.
   // previous: 현재 글보다 더 예전 글(목록에서 아래)
   // next: 현재 글보다 더 최신 글(목록에서 위)
   let previous = null;
-  for (let i = idx + 1; i < allPosts.length; i += 1) {
-    if (sameSubcategory(allPosts[i])) {
-      previous = allPosts[i];
+  for (let i = idx + 1; i < publicPosts.length; i += 1) {
+    if (sameSubcategory(publicPosts[i])) {
+      previous = publicPosts[i];
       break;
     }
   }
 
   let next = null;
   for (let i = idx - 1; i >= 0; i -= 1) {
-    if (sameSubcategory(allPosts[i])) {
-      next = allPosts[i];
+    if (sameSubcategory(publicPosts[i])) {
+      next = publicPosts[i];
       break;
     }
   }

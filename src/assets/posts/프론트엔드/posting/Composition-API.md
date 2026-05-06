@@ -1,4 +1,3 @@
-
 기존 vue2 에서는 option API 방식을 사용한다.  
  
 ```javascript

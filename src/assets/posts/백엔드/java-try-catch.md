@@ -17,7 +17,7 @@ last_modified_at: 2026-04-22
 ## 예외 처리
 
 예외가 발생했을 경우, 비정상 종료를 막고 정상 실행을 유지할 수 있도록 처리해야 한다.  
-try-catch-finally 블록으로 구성한다.  
+try-catch-finally 블록으로 구성한다.
 
 ```java
 try {
@@ -47,6 +47,24 @@ try (BufferedReader reader = Files.newBufferedReader(Paths.get("input.txt"))) {
 
 자동으로 닫을 수 있는 리소스는 AutoCloseable 인터페이스를 가진 객체만 가능하다.
 
+여러개의 리소스를 try-with-resources 문법으로 관리할 경우, 세미콜론으로 구분하여 사용한다.
+
+```java
+try (
+    A a = new A();
+    B b = new B();
+    C c = new C()
+) { ... }
+```
+
+이 때, 리스소가 닫히는 순서는 역순이다.
+
+```console
+C close()
+B close()
+A close()
+```
+
 ### 예외 던지기 [throw]
 
 메서드에서 throws를 통해서 예외 처리의 책임을 상위 메서드에 전가할 수 있다.
@@ -68,7 +86,8 @@ public void caller() {
 }
 ```
 
-런타임 예외의 경우에는 컴파일 타임에 예외 처리 여부를 체크하지 않기 때문에 실행 과정에서 예외 발생 시, 호출 스택을 따라서 위로 전파된다. 이 때, 최상위 메서드까지 해당 에러를 처리하지 않을 경우, 프로그램이 비정상 종료된다.
+런타임 예외의 경우에는 컴파일 타임에 예외 처리 여부를 체크하지 않기 때문에 실행 과정에서 예외 발생 시, 호출 스택을 따라서 위로 전파된다.
+이 때, 최상위 메서드까지 해당 에러를 처리하지 않을 경우, 프로그램이 비정상 종료된다.
 
 ```java
 public class RuntimePropagation {

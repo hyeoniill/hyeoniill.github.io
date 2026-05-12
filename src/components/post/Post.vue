@@ -189,10 +189,21 @@ useHead(() => {
   border-radius: var(--radius);
 }
 
+.post-body {
+  margin-top: calc(5 * var(--prose-line));
+}
+
+/* 마크다운 표: 셀 줄바꿈 대신 가로 스크롤 */
 .post-body :deep(table) {
   display: block;
-  max-width: 100%;
+  width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.post-body :deep(table th),
+.post-body :deep(table td) {
+  white-space: nowrap;
 }
 
 .post-missing {

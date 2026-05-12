@@ -557,12 +557,14 @@ body.is-drawer-open {
 }
 
 .prose code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.9em;
+  font-family: var(--font-sans);
+  font-size: inherit;
+  font-weight: 600;
   padding: 0.12em 0.4em;
   border-radius: 6px;
-  background: var(--surface-elevated);
-  border: 1px solid var(--border);
+  color: color-mix(in srgb, var(--accent) 42%, var(--text));
+  background: color-mix(in srgb, var(--surface-elevated) 88%, var(--accent) 12%);
+  border: 1px solid color-mix(in srgb, var(--border) 72%, var(--accent) 28%);
 }
 
 .prose pre {
@@ -608,6 +610,47 @@ body.is-drawer-open {
   padding: 0;
   border: 0;
   background: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  font-weight: 400;
+  /* github-dark .hljs 기본 글자색 — 상위 .prose code 색이 침범하지 않도록 */
+  color: #c9d1d9;
+}
+
+/* 마크다운 표: 셀 구분선 */
+.prose table {
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.1rem 0;
+}
+
+.prose table th,
+.prose table td {
+  padding: 0.5rem 0.85rem;
+  text-align: left;
+  vertical-align: middle;
+  border-right: 1px solid color-mix(in srgb, var(--border) 78%, var(--sub) 22%);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 78%, var(--sub) 22%);
+}
+
+.prose table tr > *:last-child {
+  border-right: 0;
+}
+
+.prose table tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* 바깥(left/top) 선은 제거 */
+
+/* 헤더와 바디 사이 첫 구분선(=두번째 선)만 accent 톤으로 표시 */
+.prose table tbody tr:first-child > * {
+  border-top: 1px solid color-mix(in srgb, var(--border) 50%, var(--accent) 50%);
+}
+
+.prose table thead th {
+  border-bottom-color: color-mix(in srgb, var(--border) 50%, var(--accent) 50%);
+  font-weight: 600;
 }
 
 .prose blockquote {
